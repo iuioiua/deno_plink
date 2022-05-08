@@ -1,6 +1,10 @@
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
+function parse(input: Uint8Array): string {
+  return decoder.decode(input.subarray(0, -1));
+}
+
 export interface PlinkInit {
   host: string;
   username: string;
@@ -32,6 +36,6 @@ export async function plink(
     process.stderrOutput(),
   ]);
   process.close();
-  console.assert(success, decoder.decode(rawError.subarray(0, -1)));
-  return decoder.decode(rawOutput.subarray(0, -1));
+  console.assert(success, parse(rawError));
+  return parse(rawOutput);
 }
